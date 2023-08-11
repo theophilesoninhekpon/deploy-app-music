@@ -14,8 +14,20 @@ export class AlbumComponent implements OnInit{
   constructor( private aS: AlbumService) {}
 
   ngOnInit(): void {
-      this.aS.getAlbums().subscribe(
-        {next: (alb: Album[]) => {this.albums = alb;}}
-      )
+    this.aS
+    .paginate(0, this.aS.paginateNumberPage())
+    .subscribe({
+      next: (alb: Album[]) => { 
+        this.albums = alb;
+      }
+    });
+  }
+
+  onSetPaginate($event: {start: number, end: number}) {
+    // Récupérer les albums compris entre [start et end]
+    this.aS.paginate($event.start, $event.end)
+      .subscribe({
+        next: (alb: Album[]) => this.albums = alb
+      });
   }
 }

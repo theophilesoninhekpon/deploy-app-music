@@ -25,7 +25,7 @@ export class AlbumsComponent implements OnInit {
     .subscribe({
       next: (alb: Album[]) => {
         this.albums = alb;
-        console.log(this.albums)
+      
       }
     });
   }

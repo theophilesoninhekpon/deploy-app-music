@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { map, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Album, List } from './album';
+import * as _ from 'lodash';
+import { update, values } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +18,30 @@ export class AlbumService {
   // Observable qui notifie aux abonné la page actuelle
   sendCurrentNumberPage = new Subject<number>();
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient,) { }
+  // Injecter l'instance de la base de données de Firebase : private db: Database from angular/fire/database
   /**
    * Fonction de recherche de tous les albums
    * @returns Retourne la liste de tous les albums
    */
   getAlbums(): Observable<Album[]> {
+
+    /**
+     * Référence de la BDD
+     * const albumRef = ref(this.db, 'albums')
+     * return objectVal<Album[]>(albumRef).pipe(
+     *  map((albums: Album[]) => _.values(albums)),
+     *  map((albums: Album[]) => {
+        return albums.sort(
+          (a: Album, b: Album) => b.duration - a.duration
+        );
+      }))
+     */
+
+
     return this.http.get<Album[]>(this._albumsUrl).pipe(
       map((albums: Album[]) => {
+        
         return albums.sort(
           (a: Album, b: Album) => b.duration - a.duration
         );
@@ -38,6 +55,16 @@ export class AlbumService {
    * @returns Retourne l'album correspondant; undefined si aucun identifiant ne correspond
    */
   getAlbum(id: string): Observable<Album> | undefined {
+
+      /**
+     * Référence de la BDD
+     * const albumRef = ref(this.db, `albums/${id}`)
+     * return objectVal<Album>(albumRef).pipe(
+     *    map((album: Album) => _.values(album)),
+     *    map((album: Album) => album) 
+     * ))
+     */
+
     return this.http.get<Album>(this._albumsUrl + '/' + id)
       .pipe(
         map((album: Album) => album)
@@ -51,6 +78,10 @@ export class AlbumService {
    * @returns La référence sera retourné si elle existe; undefined si l'id n'existe pas dans la liste.
    */
   getAlbumList(id: string): Observable<List> {
+    /*
+    * const albumsListRef = ref(this.db, `albumList/${id}`)
+    * return objectVal<List>(albumsListRef)
+    **/
     return this.http.get<List>(this._albumListUrl + '/' + id);
   }
 
@@ -77,6 +108,13 @@ export class AlbumService {
 
   paginate(start: number, end: number): Observable<Album[]> {
     return this.http.get<Album[]>(this._albumsUrl).pipe(
+      map((albums: Album[]) => {
+        const res = _.values(albums);
+        console.log('sans lodash', albums);
+        console.log('avec lodash', res);
+
+        return res;
+      }),
       map(
         (albums) => albums.sort(
           (a, b) => b.duration - a.duration
@@ -144,6 +182,8 @@ export class AlbumService {
   switchOn(album: Album): void {
     album.status = "on";
     // le code ci-dessous s'exécute car on y souscrit
+    //update(ref(this.db, `albums/${album.id}`), album)
+
     this.http.put<void>(this._albumsUrl + '/' + album.id, album)
             .subscribe({
               next: (data) => console.log(data),
