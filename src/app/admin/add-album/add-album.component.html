@@ -1,1 +1,58 @@
-<p>add-album works!</p>
+<div class="container-sm mt-5 w-50">
+    <h2 class="display-5 my-5 text-center"> Ajouter un album </h2>
+    <form action="" [formGroup]="albumForm" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+            <label for="name">Name: </label>
+            <input type="text" class="form-control rounded-pill"  id="name" formControlName="name">
+            <div *ngIf="name?.touched && name?.invalid" class="alert alert-danger">
+                <p *ngIf="name?.errors?.['required.']"></p>
+                <p *ngIf="name?.errors?.['minlength']"> Ce champ doit avoir une longueur minimale de {{name?.errors?.['minlength']?.requiredLength}} caractères.</p> Erreur !</div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="title">Title: </label>
+            <input type="text" class="form-control rounded-pill"  id="title" formControlName="title">
+            <div *ngIf="title?.touched && title?.invalid" class="alert alert-danger">
+                <p *ngIf="title?.errors?.['required']"></p> Ce champ est requis !</div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="ref">Ref: </label>
+            <input type="text" class="form-control rounded-pill"  id="ref" formControlName="ref">
+            <div *ngIf="ref?.touched && ref?.invalid" class="alert alert-danger">
+                <p *ngIf="ref?.errors?.['required']"> Ce champ est requis</p> 
+                <p *ngIf="ref?.errors?.['pattern']">Ce champ doit comporter exactement 5 lettres. <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions">En savoir plus</a></p>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="duration">Duration: </label>
+            <input type="text" class="form-control rounded-pill"  id="duration" formControlName="duration">
+            <div *ngIf="duration?.touched && duration?.invalid" class="alert alert-danger">
+                <p *ngIf="duration?.errors?.['required']">Ce champ est requis !</p> 
+                <p *ngIf="duration?.errors?.['pattern']"> Le champ doit respecter l'expression régulière suivante: {{duration?.errors?.['pattern']['requiredPattern']}} <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions">En savoir plus</a></p>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="description">Description: </label>
+            <textarea name="" id="description" class="form-control rounded-pill" formControlName="description"></textarea>
+            <div *ngIf="description?.touched && description?.invalid" class="alert alert-danger">
+                <p *ngIf="description?.errors?.['required']"> Le champ est requis ! </p> 
+            </div>
+        </div>
+
+        <!-- Champ des tags -->
+        <div class="mb-5" formArrayName="tags"> <!--formArrayName: pour lier cette div au getter de tags -->
+            <h3>Etiquettes de l'album</h3>
+            <button (click)="addTag()" class="btn btn-success rounded-pill"> + Ajouter une étiquette</button>
+            <div class="form-group mt-2" *ngFor="let tag of tags.controls, let i = index"> <!-- Généré dynamiquement -->
+                <label for="tag-{{i}}">Tag:</label>
+                <!-- formControlName cherche une propriété du nom de sa valeur mais [formControlName] (formControlName rendu dynamique) a pour valeur celle de l'expression JavaScript renseignée-->
+                <input [formControlName]="i" class="form-control rounded-pill py-1 w-25" id="tag-{{i}}" type="text" >  
+                <div class="alert alert-danger" *ngIf="tags.controls[i]?.invalid && tags.controls[i]?.touched"> Le champ est requis </div>
+                <!-- NB
+                    quand on connaît le nombre de champ à créer on utiliser formGroup
+                    Sinon on utilise le formArray
+                -->
+            </div>
+        </div>
+        <button [disabled]="albumForm.invalid" type="submit" class="btn btn-primary w-100 py-2 rounded-pill"> Ajouter</button>
+    </form>
+</div>

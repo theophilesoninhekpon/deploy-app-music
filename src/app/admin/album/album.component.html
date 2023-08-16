@@ -1,8 +1,18 @@
 
 <div class="p-5 w-75 mx-auto ">
+
+    <!-- Affichage du message contenu dans la chaîne de requête -->
+    <p *ngIf="message" class="alert alert-success d-flex position-relative">
+        {{message}}
+        <button (click)="message = undefined" class="btn bg-danger btn-close text-center position-absolute end-0 "></button>
+    </p>
+
+    <!-- Bouton d'ajout d'un album -->
     <p>
         <a routerLink="/admin/add" class="btn btn-dark">Add Album</a>
     </p>
+
+    <!-- Pagination -->
     <div class="d-flex justify-content-center">
         <app-paginate (setPaginate)="onSetPaginate($event)"></app-paginate>
     </div>

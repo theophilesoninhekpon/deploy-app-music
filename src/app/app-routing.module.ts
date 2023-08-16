@@ -5,6 +5,8 @@ import { AlbumDescriptionComponent } from './album-description/album-description
 import { AlbumsComponent } from './albums/albums.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AlbumComponent } from './admin/album/album.component';
+import { FormTemplateComponent } from './form-template/form-template.component';
+import { FormReactiveComponent } from './form-reactive/form-reactive.component';
 
 /**
  * L'ensemble des routes de notre application
@@ -15,6 +17,8 @@ const albumsRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'album/:albumId', component: AlbumDescriptionComponent},
   {path: 'admin', component: AlbumComponent},
+  {path: 'template', component: FormTemplateComponent},
+  {path: 'reactive', component: FormReactiveComponent},
 
   /*========= ATTENTION DANGER ==========*/
   {path: '**', component: PageNotFoundComponent},

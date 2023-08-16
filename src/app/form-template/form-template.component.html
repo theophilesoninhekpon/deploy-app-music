@@ -1,0 +1,54 @@
+<pre>
+    {{ musicModel | json }}
+</pre>
+<div class="container-sm mt-5 w-50" [hidden]="isSubmitted">
+    <h2 class="display-5 my-5 text-center"> Ajouter un album </h2>
+    <form action="" #musicForm="ngForm" (ngSubmit)="onSubmit(musicForm)">
+        <div class="form-group mb-3">
+            <label for="name">Nom: </label>
+            <input type="text" class="form-control rounded-pill py-2"  id="name" name="name" [(ngModel)]="musicModel.name" #name="ngModel" required>
+            <div *ngIf="name.touched && (name.invalid || name.pristine)" class="alert alert-danger py-1 mt-2 rounded-pill ">Le nom de l'album est requis !</div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="title">Auteur: </label>
+            <input type="text" class="form-control rounded-pill py-2"  id="title" #auteur="ngModel" name="auteur" [(ngModel)]="musicModel.auteur" required>
+            <div *ngIf="auteur.touched && (auteur.invalid || auteur.pristine)" class="alert alert-danger py-1 mt-2 rounded-pill ">Le nom de l'auteur est requis !</div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="ref" >Genre: </label>
+            <select name="genres" id="ref" class="form-control rounded-pill py-2" #genre="ngModel" [(ngModel)]="musicModel.genre">
+                <option *ngFor="let genre of genres" [value]="genre">{{genre}}</option>
+            </select>
+            <!-- <div *ngIf="genre.touched && (genre.invalid || genre.dirty)" class="alert alert-danger py-1 mt-2 rounded-pill ">Le nom de l'album est requis !</div> -->
+        </div>
+        <button type="submit" class="btn btn-primary w-100 rounded-pill mt-2 py-2" [disabled]="musicForm.invalid">Ajouter</button>
+        <!-- <div class="form-group mb-3">
+        <label for="duration">Duration: </label>
+        <input type="text" class="form-control rounded-pill"  id="duration">
+        </div>
+        <div class="form-group mb-3">
+        <label for="description">Description: </label>
+        <input type="text" class="form-control rounded-pill"  id="description">
+        </div> -->
+
+        
+    </form>
+</div>
+
+<div class="container" [hidden]="!isSubmitted">
+    <h2> Vous avez soumis l'album suivant : </h2>
+    <div class="row">
+        <div class="col-md-3">Nom</div>
+        <div class="col-md-9"> {{ musicModel.name }} </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">Auteur</div>
+        <div class="col-md-9"> {{ musicModel.auteur }} </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">Genre</div>
+        <div class="col-md-9"> {{ musicModel.genre }} </div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary" (click)="isSubmitted = false"> Editer</button>
+</div>

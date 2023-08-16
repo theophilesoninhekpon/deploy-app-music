@@ -1,0 +1,47 @@
+
+<div>
+    <p>Nom: {{ musicForm.get("name")?.value }}</p>
+    <p>Auteur: {{ musicForm.get("auteur")?.value }}</p>
+    <p>Genre: {{ musicForm.get("genre")?.value }}</p>
+</div>
+<div class="container-sm mt-5 w-50">
+    <h2 class="display-5 my-5 text-center"> Ajouter un album </h2>
+    <form action="" [formGroup]="musicForm" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+            <label for="name">Nom: </label>
+            <input type="text" class="form-control rounded-pill py-2"  id="name" name="name" formControlName="name">
+            <div class="alert alert-danger py-1 mt-2 rounded-pill " *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+                <p *ngIf="name?.errors?.['required']"> Le nom de l'album est requis ! </p>
+                <p *ngIf="name?.errors?.['minlength']"> Le nom de l'album doit contenir "{{name?.errors?.['minlength']?.['requiredLength']}}" caractères ! Vous en avez fourni {{name?.errors?.['minlength']?.['actualLength']}} </p>
+            </div>
+        </div> 
+        <div class="form-group mb-3">
+            <label for="title">Auteur: </label>
+            <input type="text" class="form-control rounded-pill py-2"  id="title" formControlName="auteur">
+            <!-- <div class="alert alert-success" *ngIf="!auteur.invalid">
+                Icone. Le nom est valide
+            </div> -->
+            <div class="alert alert-danger py-1 mt-2 rounded-pill " *ngIf="auteur?.touched && (auteur?.invalid || auteur?.pristine)">
+                <p> Le nom de l'auteur est requis ! </p>
+                <p> {{ auteur?.errors | json }}</p>
+                
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label for="ref" >Genre: </label>
+            <select name="genres" id="ref" class="form-control rounded-pill py-2" formControlName="genre">
+                <option value="">--Sélectionnez un genre--</option>
+                <option *ngFor="let genre of genres" [value]="genre">{{genre}}</option>
+            </select>
+            <!-- <div *ngIf="genre.touched && (genre.invalid || genre.dirty)" class="alert alert-danger py-1 mt-2 rounded-pill ">Le nom de l'album est requis !</div> -->
+        </div>
+        <button type="submit" class="btn btn-primary w-100 rounded-pill mt-2 py-2" >Ajouter</button>
+
+    </form>
+
+    <!-- <div>
+        <p> <input type="search" placeholder="Search" [formControl] = "search"></p>
+        <p> Search "{{ search.value }}"</p>
+    </div> -->
+</div>
+
